@@ -5,26 +5,12 @@ import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHt
 import { expressMiddleware } from "@apollo/server/express4";
 import express from "express";
 import { mergeResolvers, mergeTypeDefs } from "@graphql-tools/merge";
-
-const typeDefs = `#graphql
- type Query{
-  health: Boolean
- }
-`;
-
-const resolvers = {
-  Query: {
-    // eslint-disable-next-line @typescript-eslint/require-await
-    health: async (_: any, args: any, context: MyContext, info: any) => {
-      return true;
-    },
-  },
-};
-
-type MyContext = {
-  req: express.Request;
-  res: express.Response;
-};
+import { MyContext } from "./types/graphql.js";
+import greetResolvers from "./modules/root/greet/greet.resolvers.js";
+import greetTypeDefs from "./modules/root/greet/greet.typeDefs.js";
+import makeTodoTypeDefs from "./modules/todos/make-todo/make-todo.typeDefs.js";
+import makeTodoResolvers from "./modules/todos/make-todo/make-todo.resolvers.js";
+import TodoTypeDefs from "./modules/root/models/todo.typeDefs.js";
 
 async function main() {
   const PORT = process.env.PORT || 5555;
@@ -32,8 +18,8 @@ async function main() {
 
   const httpServer = http.createServer(app);
   const server = new ApolloServer<MyContext>({
-    typeDefs: mergeTypeDefs([typeDefs]),
-    resolvers: mergeResolvers([resolvers]),
+    typeDefs: mergeTypeDefs([greetTypeDefs, makeTodoTypeDefs, TodoTypeDefs]),
+    resolvers: mergeResolvers([greetResolvers, makeTodoResolvers]),
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
