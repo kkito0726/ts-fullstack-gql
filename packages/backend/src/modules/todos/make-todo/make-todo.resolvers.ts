@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { MyContext } from "../../../types/graphql.js";
 import { Resolvers } from "../../../__generated__/graphql.js";
 
-const resolvers: Resolvers<MyContext> = {
+export const resolvers: Resolvers<MyContext> = {
   Mutation: {
     // eslint-disable-next-line @typescript-eslint/require-await
     makeTodo: async (_, { makeTodoInput }, context, info) => {
@@ -21,5 +21,3 @@ const resolvers: Resolvers<MyContext> = {
     },
   },
 };
-
-export default resolvers;
