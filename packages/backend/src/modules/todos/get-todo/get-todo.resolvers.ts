@@ -14,11 +14,7 @@ export const resolvers: Resolvers<MyContext> = {
       if (!existingTodo) throw new GraphQLError("Not Found");
 
       return {
-        todo: {
-          ...existingTodo,
-          updatedAt: existingTodo.updatedAt.toISOString(),
-          createdAt: existingTodo.createdAt.toISOString(),
-        },
+        todo: existingTodo,
       };
     },
   },

@@ -1,8 +1,8 @@
 type Todo {
   id: String!
   title: String!
-  updatedAt: String!
-  createdAt: String!
+  updatedAt: DateTime!
+  createdAt: DateTime!
 }
 
 input MakeTodoInput {
