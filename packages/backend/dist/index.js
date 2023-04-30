@@ -3,6 +3,7 @@ import { ApolloServer } from "@apollo/server";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import { expressMiddleware } from "@apollo/server/express4";
 import express from "express";
+import cors from "cors";
 import { PrismaClient } from "@prisma/client";
 import { buildSchema } from "./utils/buildSchema.js";
 const prismaClient = new PrismaClient();
@@ -16,6 +17,9 @@ async function main() {
         plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     });
     await server.start();
+    app.use(cors({
+        origin: ["http://127.0.0.1:5174"],
+    }));
     app.use(express.json());
     app.use("/graphql", expressMiddleware(server, {
         // eslint-disable-next-line @typescript-eslint/require-await
