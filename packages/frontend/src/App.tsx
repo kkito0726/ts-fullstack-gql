@@ -1,5 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useTodosQuery } from "./__generated__/graphql";
+import { useState } from "react";
+import {
+  TodosDocument,
+  useMakeTodoMutation,
+  useTodosQuery,
+} from "./__generated__/graphql";
 import { Button } from "./components/Elements/Button";
 import { InputField } from "./components/Elements/InputField";
 
@@ -7,16 +12,49 @@ import { Layout } from "./components/Layout";
 import { TodoItem } from "./components/TodoItem";
 
 function App() {
-  const { data } = useTodosQuery();
+  const [title, setTitle] = useState<string>("");
+  const { data, loading, error } = useTodosQuery();
+  const [makeTodoMut, { loading: makeTodoMutLoading }] = useMakeTodoMutation();
+
+  const handleTitleInputChange: React.ChangeEventHandler<HTMLInputElement> = (
+    e
+  ) => {
+    setTitle(e.target.value);
+  };
+
+  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (
+    event
+  ) => {
+    event.preventDefault();
+
+    try {
+      await makeTodoMut({
+        variables: {
+          makeTodoInput: {
+            title,
+          },
+        },
+        refetchQueries: [TodosDocument],
+      });
+
+      setTitle("");
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error);
+      }
+    }
+  };
   return (
     <Layout>
       <div className="max-w-xl mx-auto p-7">
         <div className="bg-white p-6 rounded shadow">
-          <form className="flex flex-col">
+          <form className="flex flex-col" onSubmit={handleSubmit}>
             <InputField
               className="flex flex-col mb-6"
               labelName="NEW Todo"
               placeholder="試薬の調製をする..."
+              onChange={handleTitleInputChange}
+              value={title}
             />
             <Button>Add Todo</Button>
           </form>
