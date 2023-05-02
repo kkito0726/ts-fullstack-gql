@@ -3,6 +3,7 @@ import { useState } from "react";
 import {
   TodosDocument,
   useMakeTodoMutation,
+  useRemoveTodoMutation,
   useTodosQuery,
 } from "./__generated__/graphql";
 import { Button } from "./components/Elements/Button";
@@ -15,6 +16,25 @@ function App() {
   const [title, setTitle] = useState<string>("");
   const { data, loading, error } = useTodosQuery();
   const [makeTodoMut, { loading: makeTodoMutLoading }] = useMakeTodoMutation();
+  const [removeTodoMut, { loading: removeTodoMutLoading }] =
+    useRemoveTodoMutation();
+
+  const removeTodo = async (id: string) => {
+    try {
+      await removeTodoMut({
+        variables: {
+          removeTodoInput: {
+            todoId: id,
+          },
+        },
+        refetchQueries: [TodosDocument],
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+    }
+  };
 
   const handleTitleInputChange: React.ChangeEventHandler<HTMLInputElement> = (
     e
@@ -60,7 +80,7 @@ function App() {
           </form>
         </div>
         {data?.getTodos?.todos?.map((item) => (
-          <TodoItem key={item?.id} todoItem={item!} />
+          <TodoItem key={item?.id} todoItem={item!} removeTodo={removeTodo} />
         ))}
       </div>
     </Layout>

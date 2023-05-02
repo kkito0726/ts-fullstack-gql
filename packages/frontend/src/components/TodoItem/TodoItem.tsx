@@ -6,9 +6,15 @@ import { DropDownMenu } from "../Elements/DropdownMenu";
 
 type TodoItemProps = {
   todoItem: Todo;
+  removeTodo: (id: string) => Promise<void>;
 };
 
-export const TodoItem: React.FC<TodoItemProps> = ({ todoItem }) => {
+export const TodoItem: React.FC<TodoItemProps> = ({ todoItem, removeTodo }) => {
+  const handleRemoveBtnClick: React.MouseEventHandler<
+    HTMLButtonElement
+  > = () => {
+    removeTodo(todoItem.id);
+  };
   return (
     <article
       className={`flex justify-between items-center shadow-sm bg-white rounded border-l-8 my-4 px-4 h-20 ${
@@ -55,6 +61,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todoItem }) => {
           </div>,
           <button
             key={2}
+            onClick={handleRemoveBtnClick}
             className="flex justify-between items-center w-full h-hull text-start"
           >
             <span className="text-red-400">Remove</span>
