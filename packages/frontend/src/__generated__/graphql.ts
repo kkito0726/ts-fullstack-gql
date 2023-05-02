@@ -116,6 +116,13 @@ export type RemoveTodoMutationVariables = Exact<{
 
 export type RemoveTodoMutation = { __typename?: 'Mutation', removeTodo: { __typename?: 'RemoveTodoResponse', todo: { __typename?: 'Todo', id: string, title: string } } };
 
+export type UpdateTodoMutationVariables = Exact<{
+  updateTodoInput: UpdateTodoInput;
+}>;
+
+
+export type UpdateTodoMutation = { __typename?: 'Mutation', updateTodo: { __typename?: 'UpdateTodoResponse', todo: { __typename?: 'Todo', id: string, title: string, isCompleted: boolean, updatedAt: Date, createdAt: Date } } };
+
 export type TodosQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -197,6 +204,45 @@ export function useRemoveTodoMutation(baseOptions?: Apollo.MutationHookOptions<R
 export type RemoveTodoMutationHookResult = ReturnType<typeof useRemoveTodoMutation>;
 export type RemoveTodoMutationResult = Apollo.MutationResult<RemoveTodoMutation>;
 export type RemoveTodoMutationOptions = Apollo.BaseMutationOptions<RemoveTodoMutation, RemoveTodoMutationVariables>;
+export const UpdateTodoDocument = gql`
+    mutation UpdateTodo($updateTodoInput: UpdateTodoInput!) {
+  updateTodo(updateTodoInput: $updateTodoInput) {
+    todo {
+      id
+      title
+      isCompleted
+      updatedAt
+      createdAt
+    }
+  }
+}
+    `;
+export type UpdateTodoMutationFn = Apollo.MutationFunction<UpdateTodoMutation, UpdateTodoMutationVariables>;
+
+/**
+ * __useUpdateTodoMutation__
+ *
+ * To run a mutation, you first call `useUpdateTodoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTodoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTodoMutation, { data, loading, error }] = useUpdateTodoMutation({
+ *   variables: {
+ *      updateTodoInput: // value for 'updateTodoInput'
+ *   },
+ * });
+ */
+export function useUpdateTodoMutation(baseOptions?: Apollo.MutationHookOptions<UpdateTodoMutation, UpdateTodoMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateTodoMutation, UpdateTodoMutationVariables>(UpdateTodoDocument, options);
+      }
+export type UpdateTodoMutationHookResult = ReturnType<typeof useUpdateTodoMutation>;
+export type UpdateTodoMutationResult = Apollo.MutationResult<UpdateTodoMutation>;
+export type UpdateTodoMutationOptions = Apollo.BaseMutationOptions<UpdateTodoMutation, UpdateTodoMutationVariables>;
 export const TodosDocument = gql`
     query Todos {
   getTodos {

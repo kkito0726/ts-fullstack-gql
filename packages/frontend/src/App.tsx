@@ -5,6 +5,7 @@ import {
   useMakeTodoMutation,
   useRemoveTodoMutation,
   useTodosQuery,
+  useUpdateTodoMutation,
 } from "./__generated__/graphql";
 import { Button } from "./components/Elements/Button";
 import { InputField } from "./components/Elements/InputField";
@@ -18,6 +19,8 @@ function App() {
   const [makeTodoMut, { loading: makeTodoMutLoading }] = useMakeTodoMutation();
   const [removeTodoMut, { loading: removeTodoMutLoading }] =
     useRemoveTodoMutation();
+  const [updateTodoMut, { loading: updateTodoMutLoading }] =
+    useUpdateTodoMutation();
 
   const removeTodo = async (id: string) => {
     try {
@@ -64,6 +67,24 @@ function App() {
       }
     }
   };
+
+  const updateTodoCompleteStatus = (id: string, isCompleted: boolean) => {
+    try {
+      updateTodoMut({
+        variables: {
+          updateTodoInput: {
+            todoId: id,
+            isCompleted: isCompleted,
+          },
+        },
+        refetchQueries: [TodosDocument],
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error);
+      }
+    }
+  };
   return (
     <Layout>
       <div className="max-w-xl mx-auto p-7">
@@ -80,7 +101,12 @@ function App() {
           </form>
         </div>
         {data?.getTodos?.todos?.map((item) => (
-          <TodoItem key={item?.id} todoItem={item!} removeTodo={removeTodo} />
+          <TodoItem
+            key={item?.id}
+            todoItem={item!}
+            removeTodo={removeTodo}
+            updateTodoCompleteStatus={updateTodoCompleteStatus}
+          />
         ))}
       </div>
     </Layout>

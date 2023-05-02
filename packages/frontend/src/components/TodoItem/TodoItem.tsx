@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiOutlineEdit } from "react-icons/ai";
 import { BiTrash } from "react-icons/bi";
 import { Todo } from "../../__generated__/graphql";
@@ -7,13 +7,29 @@ import { DropDownMenu } from "../Elements/DropdownMenu";
 type TodoItemProps = {
   todoItem: Todo;
   removeTodo: (id: string) => Promise<void>;
+  updateTodoCompleteStatus: (
+    id: string,
+    isCompleted: boolean
+  ) => void | Promise<void>;
 };
 
-export const TodoItem: React.FC<TodoItemProps> = ({ todoItem, removeTodo }) => {
+export const TodoItem: React.FC<TodoItemProps> = ({
+  todoItem,
+  removeTodo,
+  updateTodoCompleteStatus,
+}) => {
+  const [isCompleted, setIsCompleted] = useState<boolean>(todoItem.isCompleted);
   const handleRemoveBtnClick: React.MouseEventHandler<
     HTMLButtonElement
   > = () => {
     removeTodo(todoItem.id);
+  };
+
+  const handleCompleteTodoCheckboxChange: React.ChangeEventHandler<
+    HTMLInputElement
+  > = (event) => {
+    //
+    updateTodoCompleteStatus(todoItem.id, event.target.checked);
   };
   return (
     <article
@@ -27,6 +43,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todoItem, removeTodo }) => {
           type="checkbox"
           checked={todoItem?.isCompleted}
           className="w-4 h-4"
+          onChange={handleCompleteTodoCheckboxChange}
         />
 
         <div className="flex flex-col ml-4">
