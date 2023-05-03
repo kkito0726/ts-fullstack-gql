@@ -1,3 +1,4 @@
+import { toast } from "react-hot-toast";
 import {
   useTodosQuery,
   useMakeTodoMutation,
@@ -36,6 +37,7 @@ export const useTodos = () => {
         },
         refetchQueries: [TodosDocument],
       });
+      toast.success("Todoが削除されました");
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message);
@@ -45,7 +47,7 @@ export const useTodos = () => {
 
   const makeTodo = async (title: string) => {
     if (isEmptyString(title)) {
-      alert("何も書かれていません！");
+      toast.error("何も書かれていません！");
       return;
     }
     try {
@@ -57,6 +59,8 @@ export const useTodos = () => {
         },
         refetchQueries: [TodosDocument],
       });
+
+      toast.success("Todoが設定されました！");
     } catch (error) {
       if (error instanceof Error) {
         console.error(error);
@@ -84,7 +88,7 @@ export const useTodos = () => {
 
   const updateTodoTitle = async (id: string, title: string) => {
     if (isEmptyString(title)) {
-      alert("何も書かれていません！");
+      toast.error("何も書かれていません！");
       return;
     }
     try {
@@ -97,6 +101,7 @@ export const useTodos = () => {
         },
         refetchQueries: [TodosDocument],
       });
+      toast.success("Todoの内容が更新されました");
     } catch (error) {
       if (error instanceof Error) {
         console.error(error.message);
