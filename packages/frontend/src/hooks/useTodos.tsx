@@ -5,6 +5,7 @@ import {
   useUpdateTodoMutation,
   TodosDocument,
 } from "../__generated__/graphql";
+import { isEmptyString } from "../util/isEmptyString";
 
 export const useTodos = () => {
   const {
@@ -43,6 +44,10 @@ export const useTodos = () => {
   };
 
   const makeTodo = async (title: string) => {
+    if (isEmptyString(title)) {
+      alert("何も書かれていません！");
+      return;
+    }
     try {
       await makeTodoMut({
         variables: {
@@ -78,6 +83,10 @@ export const useTodos = () => {
   };
 
   const updateTodoTitle = async (id: string, title: string) => {
+    if (isEmptyString(title)) {
+      alert("何も書かれていません！");
+      return;
+    }
     try {
       updateTodoMut({
         variables: {
