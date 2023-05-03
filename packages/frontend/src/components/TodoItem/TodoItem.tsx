@@ -11,14 +11,17 @@ type TodoItemProps = {
     id: string,
     isCompleted: boolean
   ) => void | Promise<void>;
+  updateTodoTitle: (id: string, title: string) => void | Promise<void>;
 };
 
 export const TodoItem: React.FC<TodoItemProps> = ({
   todoItem,
   removeTodo,
   updateTodoCompleteStatus,
+  updateTodoTitle,
 }) => {
-  const [isCompleted, setIsCompleted] = useState<boolean>(todoItem.isCompleted);
+  const [isTitleEditing, setIsTitleEditing] = useState<boolean>(false);
+  const [todoTitleInput, setTodoTitleInput] = useState<string>(todoItem.title);
   const handleRemoveBtnClick: React.MouseEventHandler<
     HTMLButtonElement
   > = () => {
@@ -30,6 +33,31 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   > = (event) => {
     //
     updateTodoCompleteStatus(todoItem.id, event.target.checked);
+  };
+
+  const handleTodoTitleInput: React.ChangeEventHandler<HTMLInputElement> = (
+    event
+  ) => {
+    setTodoTitleInput(event.target.value);
+  };
+
+  const handleEditTitleBtnClick: React.MouseEventHandler<
+    HTMLButtonElement
+  > = () => {
+    setIsTitleEditing(true);
+  };
+
+  const handleTodoTitleInputBlur: React.FocusEventHandler<
+    HTMLInputElement
+  > = async () => {
+    try {
+      await updateTodoTitle(todoItem.id, todoTitleInput);
+      setIsTitleEditing(false);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+    }
   };
   return (
     <article
@@ -47,15 +75,25 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         />
 
         <div className="flex flex-col ml-4">
-          <p
-            className={`${
-              todoItem?.isCompleted
-                ? "text-emerald-500 line-through"
-                : "text-slate-600"
-            }`}
-          >
-            {todoItem?.title}
-          </p>
+          {isTitleEditing ? (
+            <input
+              className="text-slate-600"
+              value={todoTitleInput}
+              onChange={handleTodoTitleInput}
+              autoFocus
+              onBlur={handleTodoTitleInputBlur}
+            />
+          ) : (
+            <p
+              className={`${
+                todoItem?.isCompleted
+                  ? "text-emerald-500 line-through"
+                  : "text-slate-600"
+              }`}
+            >
+              {todoItem?.title}
+            </p>
+          )}
 
           <small className="text-gray-400">
             {todoItem?.createdAt.toISOString().split("T")[0]}
@@ -71,7 +109,10 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         }
         menuItems={[
           <div key={1}>
-            <button className="flex justify-between items-center w-full h-hull text-start text-slate-600">
+            <button
+              className="flex justify-between items-center w-full h-hull text-start text-slate-600"
+              onClick={handleEditTitleBtnClick}
+            >
               <span>Edit</span>
               <AiOutlineEdit />
             </button>

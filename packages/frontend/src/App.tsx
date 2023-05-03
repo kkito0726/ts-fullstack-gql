@@ -85,6 +85,24 @@ function App() {
       }
     }
   };
+
+  const updateTodoTitle = async (id: string, title: string) => {
+    try {
+      updateTodoMut({
+        variables: {
+          updateTodoInput: {
+            todoId: id,
+            title,
+          },
+        },
+        refetchQueries: [TodosDocument],
+      });
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+    }
+  };
   return (
     <Layout>
       <div className="max-w-xl mx-auto p-7">
@@ -106,6 +124,7 @@ function App() {
             todoItem={item!}
             removeTodo={removeTodo}
             updateTodoCompleteStatus={updateTodoCompleteStatus}
+            updateTodoTitle={updateTodoTitle}
           />
         ))}
       </div>
