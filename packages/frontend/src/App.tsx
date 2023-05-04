@@ -1,5 +1,5 @@
 /* eslint-disable react/react-in-jsx-scope */
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { SyncLoader } from "react-spinners";
 import { Toaster } from "react-hot-toast";
 import { Button } from "./components/Elements/Button";
@@ -8,8 +8,10 @@ import { InputField } from "./components/Elements/InputField";
 import { Layout } from "./components/Layout";
 import { TodoItem } from "./components/TodoItem";
 import { useTodos } from "./hooks/useTodos";
+import { useDarkModeContext } from "./contexts/DarkModeContext";
 
 function App() {
+  const { isDarkMode } = useDarkModeContext();
   const [title, setTitle] = useState<string>("");
   const {
     todoData,
@@ -37,11 +39,16 @@ function App() {
   };
 
   return (
-    <>
-      <Toaster position="top-right" />
+    <div className={isDarkMode ? "dark" : "light"}>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          className: "dark:bg-zinc-700 dark:text-zinc-100",
+        }}
+      />
       <Layout>
         <div className="max-w-xl mx-auto p-7">
-          <div className="bg-white p-6 rounded shadow">
+          <div className="bg-white p-6 rounded shadow dark:bg-zinc-700">
             <form className="flex flex-col" onSubmit={handleSubmit}>
               <InputField
                 className="flex flex-col mb-6"
@@ -70,7 +77,7 @@ function App() {
           )}
         </div>
       </Layout>
-    </>
+    </div>
   );
 }
 

@@ -63,7 +63,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
     <article
       className={`flex justify-between items-center shadow-sm bg-white rounded border-l-8 my-4 px-4 h-20 ${
         todoItem?.isCompleted ? "border-emerald-500" : "border-blue-600"
-      }`}
+      } dark:bg-zinc-700`}
       key={todoItem?.id}
     >
       <div className="flex items-center">
@@ -77,7 +77,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         <div className="flex flex-col ml-4">
           {isTitleEditing ? (
             <input
-              className="text-slate-600"
+              className="text-slate-600 dark:bg-zinc-700 dark:text-zinc-100"
               value={todoTitleInput}
               onChange={handleTodoTitleInput}
               autoFocus
@@ -88,7 +88,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
               className={`${
                 todoItem?.isCompleted
                   ? "text-emerald-500 line-through"
-                  : "text-slate-600"
+                  : "text-slate-600 dark:text-zinc-100"
               }`}
             >
               {todoItem?.title}
@@ -103,14 +103,14 @@ export const TodoItem: React.FC<TodoItemProps> = ({
 
       <DropDownMenu
         clickTarget={
-          <small className="text-gray-500 hover:bg-gray-100 p-1 rounded-full">
+          <small className="text-gray-500 hover:bg-gray-100 p-1 rounded-full dark:hover:bg-zinc-600">
             •••
           </small>
         }
         menuItems={[
           <div key={1}>
             <button
-              className="flex justify-between items-center w-full h-hull text-start text-slate-600"
+              className="flex justify-between items-center w-full h-hull text-start text-slate-600 dark:text-zinc-100"
               onClick={handleEditTitleBtnClick}
             >
               <span>Edit</span>
@@ -120,9 +120,9 @@ export const TodoItem: React.FC<TodoItemProps> = ({
           <button
             key={2}
             onClick={handleRemoveBtnClick}
-            className="flex justify-between items-center w-full h-hull text-start"
+            className="flex justify-between items-center w-full h-hull text-start text-red-400"
           >
-            <span className="text-red-400">Remove</span>
+            <span>Remove</span>
             <BiTrash />
           </button>,
         ]}
