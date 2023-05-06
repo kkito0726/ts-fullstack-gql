@@ -1,0 +1,7 @@
+type RemoveAllTodoResponse {
+  status: String!
+}
+
+type Mutation {
+  RemoveAllTodo: RemoveAllTodoResponse!
+}
