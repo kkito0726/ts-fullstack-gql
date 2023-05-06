@@ -4,6 +4,7 @@ import {
   useMakeTodoMutation,
   useRemoveTodoMutation,
   useUpdateTodoMutation,
+  useRemoveAllTodoMutation,
   TodosDocument,
 } from "../__generated__/graphql";
 import { isEmptyString } from "../util/isEmptyString";
@@ -26,6 +27,11 @@ export const useTodos = () => {
     updateTodoMut,
     { loading: updateTodoMutLoading, error: updateTodoMutError },
   ] = useUpdateTodoMutation();
+
+  const [
+    removeAllTodoMut,
+    { loading: removeAllTodoLoading, error: removeAllTodoError },
+  ] = useRemoveAllTodoMutation();
 
   const removeTodo = async (id: string) => {
     try {
@@ -109,6 +115,19 @@ export const useTodos = () => {
     }
   };
 
+  const removeAllTodo = async () => {
+    try {
+      removeAllTodoMut({
+        refetchQueries: [TodosDocument],
+      });
+      toast.success("すべてのTodoが削除されました");
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message);
+      }
+    }
+  };
+
   return {
     todoData,
     todoDataLoading,
@@ -123,5 +142,8 @@ export const useTodos = () => {
     updateTodoTitle,
     updateTodoMutLoading,
     updateTodoMutError,
+    removeAllTodo,
+    removeAllTodoLoading,
+    removeAllTodoError,
   } as const;
 };
