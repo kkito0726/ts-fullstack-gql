@@ -13,7 +13,8 @@
     "gen:gql": "graphql-codegen --config codegen.yml",
     "gen:db": "prisma migrate dev --name",
     "gui:db": "prisma studio",
-    "cpgql": "copyfiles -u 1 src/**/*.graphql ./dist"
+    "cpgql": "copyfiles -u 1 src/**/*.graphql ./dist",
+    "d": "prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -34,7 +35,7 @@
     "typescript": "4.9.5"
   },
   "dependencies": {
-    "@apollo/server": "4.4.0",
+    "@apollo/server": "^4.4.0",
     "@prisma/client": "4.13.0",
     "cors": "2.8.5",
     "express": "4.18.2",

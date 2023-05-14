@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start:front": "npm run dev:front",
+    "start:back": "node packages/backend/dist/index.js",
     "build": "npm run build:back && npm run build:front",
     "build:back": "npm run build -w backend",
     "build:front": "npm run build -w frontend",
@@ -16,5 +18,9 @@
   "license": "ISC",
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "vite": "^4.3.5"
+  },
+  "proxy": "http://localhost:3000"
 }

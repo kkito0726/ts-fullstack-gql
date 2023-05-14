@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  backend-graphql:
+    build:
+      context: ./
+      dockerfile: ./packages/backend/Dockerfile
+    container_name: backend-graphql-container
+    volumes:
+      - ./packages/backend:/packages/backend
+    working_dir: /packages/backend
+    command: node ./dist/index.js
+    ports:
+      - 5555:5555
+    tty: true
+
+  frontend-react:
+    build:
+      context: ./
+      dockerfile: ./packages/frontend/Dockerfile
+    container_name: frontend-graphql-container
+    volumes:
+      - ./packages/frontend:/packages/frontend
+    working_dir: /packages/frontend
+    command: npm run dev
+    ports:
+      - 3000:3000
+    tty: true
